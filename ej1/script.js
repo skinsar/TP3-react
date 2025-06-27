@@ -5,10 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const calcularBtn = document.getElementById('calcularBtn');
     const resultSpan = document.getElementById('resultado');
 
+    const verificarBtn = () => {
+        const operacion = operationSelect.value;
+        const num1Value = num1Input.value;
+        const num2Value = num2Input.value;
 
-    const verificarbtn = () => {
-        if (operationSelect.value === 'division') {
-            calcularBtn.disabled = true; // 
+        if (operacion === 'division' && (num1Value === '0' || num2Value === '0')) {
+            calcularBtn.disabled = true;
         } else {
             calcularBtn.disabled = false;
         }
@@ -18,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const num1 = parseFloat(num1Input.value);
         const num2 = parseFloat(num2Input.value);
         const operacion = operationSelect.value;
-        let resultado = 0;
+        let resultado;
 
         if (isNaN(num1) || isNaN(num2)) {
             resultSpan.textContent = 'Por favor, ingrese números válidos.';
@@ -35,12 +38,22 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'multiplicacion':
                 resultado = num1 * num2;
                 break;
+            case 'division':
+                if (num2 === 0) {
+                    resultado = 'Error: No se puede dividir por cero.';
+                } else {
+                    resultado = num1 / num2;
+                }
+                break;
         }
         resultSpan.textContent = resultado;
     };
 
-    operationSelect.addEventListener('change', verificarbtn);
+    operationSelect.addEventListener('change', verificarBtn);
+    num1Input.addEventListener('input', verificarBtn);
+    num2Input.addEventListener('input', verificarBtn);
+    
     calcularBtn.addEventListener('click', calcular);
 
-    verificarbtn();
+    verificarBtn();
 });
